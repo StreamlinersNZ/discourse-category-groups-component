@@ -19,6 +19,23 @@
   li.category-box {
     width: unset;
     margin: 0;
+
+    // HealthPathways does not colour-code categories, so every box gets the
+    // same quiet border and lifts on hover instead.
+    //
+    // !important is unavoidable here: the component renders an inline
+    // border-color from the category colour, and its `noCategoryStyle` guard is
+    // referenced in the template but never defined on the component, so the
+    // guard never fires. Inline styles beat any selector specificity.
+    border: 1px solid;
+    border-color: var(--redditish-border-color, #cdd7e1) !important;
+    box-shadow: var(--hp-shadow-resting, 0 1px 2px 0 rgb(21 21 21 / 8%));
+
+    .discourse-no-touch & {
+      &:hover {
+        box-shadow: var(--hp-shadow-floating, 0 3px 6px 0 rgb(21 21 21 / 8%));
+      }
+    }
   }
 
   .category-details {
@@ -183,11 +200,14 @@
 
       .category-box-inner {
         border: none;
-        padding: 2em;
+
+        // Tighter than upstream's 2em: HealthPathways fits more groups above
+        // the fold on the categories page.
+        padding: 0.5em;
         transition: background 0.25s ease-in-out;
 
         @media screen and (width <= 700px) {
-          padding: 2em 1em 1.25em;
+          padding: 0.5em 1em 1.25em;
         }
       }
 
